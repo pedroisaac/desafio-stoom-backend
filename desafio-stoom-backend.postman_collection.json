@@ -1,0 +1,310 @@
+{
+	"info": {
+		"_postman_id": "7d01fd10-26df-4945-8dc3-81e6cf991c2f",
+		"name": "desafio-stoom-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0 - teste-google-geocoding",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://maps.googleapis.com/maps/api/geocode/json?address=Quadra+408+Norte+Alamenda+8+Lote+14,+Plano+Diretor+Norte,+Palmas,+TO&key=AIzaSyCj0cY2yEvVfYhAaTz3-P2MW-YRKmhz5Uw",
+					"protocol": "https",
+					"host": [
+						"maps",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"maps",
+						"api",
+						"geocode",
+						"json"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "Quadra+408+Norte+Alamenda+8+Lote+14,+Plano+Diretor+Norte,+Palmas,+TO"
+						},
+						{
+							"key": "key",
+							"value": "AIzaSyCj0cY2yEvVfYhAaTz3-P2MW-YRKmhz5Uw"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1 - Limpar Sessão Autenticada",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.unset(\"authorization-login\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1 - login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Setar Token no Header\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log(\"Bearer \" + jsonData.token)",
+							"    pm.globals.set(\"authorization-login\", \"Bearer \" + jsonData.token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"stoom\",\n    \"password\":\"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2 - lista endereços",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization-login}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/enderecos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"enderecos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2 - lista endereço by ID:2",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization-login}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/endereco/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"endereco",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3 - criar endereço ID:3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization-login}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"streetName\": \"Rua Galileu Batista Arantes\", \n    \"number\": \"50\", \n    \"complement\": \"lote 23\", \n    \"neighbourhood\": \"Bougainville\", \n    \"city\": \"Anápolis\", \n    \"state\": \"GO\", \n    \"country\": \"Brasil\", \n    \"zipcode\": \"75075570\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/endereco",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"endereco"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4 - atualizar endereço ID:3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization-login}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 3,\n    \"streetName\": \"Rua Galileu Batista Arantes\",\n    \"number\": \"50\",\n    \"neighbourhood\": \"Bougainville\",\n    \"city\": \"Anápolis\",\n    \"state\": \"GO\",\n    \"country\": \"Brasil\",\n    \"zipcode\": \"75075570\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/endereco/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"endereco",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5 - deletar endereço ID:3",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization-login}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/endereco/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"endereco",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6 - criar endereço sem ZIPCODE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization-login}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"streetName\": \"Rua Galileu Batista Arantes\", \n    \"number\": \"50\", \n    \"complement\": \"lote 23\", \n    \"neighbourhood\": \"Bougainville\", \n    \"city\": \"Anápolis\", \n    \"state\": \"GO\", \n    \"country\": \"Brasil\"\n }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/endereco",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"endereco"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
