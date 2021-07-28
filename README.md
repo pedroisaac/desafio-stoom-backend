@@ -18,7 +18,7 @@ Foi utilizada as seguintes tecnologias:
 - Arquitetura REST para os EndPoints
 - JWT para autenticação dos EndPoints
 - Google Geocoding API
-- Teste com jUnit5 & Mockito
+- Testes Unitários com jUnit5 & Mockito
 
 A Classe <b>"InitialDbConfig.java"</b> popula o Banco com os dados iniciais: 
 - 1 Usuário para o JWT 
@@ -75,6 +75,6 @@ Build and run with Compose | docker-compose.yml
 > 
 >`shouldReturn400WhenCreateNewAddressWithoutZipcode()` Cadastra novo Endereço sem dado obrigatório
 > 
->`shouldUpdateAddress()` shouldFetchAllAddresses() Atualiza Endereço
+>`shouldUpdateAddress()` Atualiza Endereço
 > 
 
