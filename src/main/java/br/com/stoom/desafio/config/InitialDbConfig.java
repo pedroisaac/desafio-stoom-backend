@@ -21,11 +21,12 @@ public class InitialDbConfig {
 
 	@PostConstruct
 	public void init() throws Exception {
-		mockRulesAndUsers();
+		mockUserJWT();
 		mockAddress();
 	}
 
-	private void mockRulesAndUsers() throws Exception {
+	private void mockUserJWT() throws Exception {
+		//password=password
 		User admin = new User("stoom", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6");
 		userService.save(admin);
 	}

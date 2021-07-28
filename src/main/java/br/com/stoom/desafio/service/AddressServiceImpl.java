@@ -30,20 +30,20 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	@Transactional
 	public Address save(Address address) throws Exception {
-		if (existeEnderecoComCoordenadas(address.getLatitude(), address.getLongitude())) {
+		if (this.repository.existsAddressWithCoordinates(address.getLatitude(), address.getLongitude())) {
 			throw new Exception("Já existe endereço cadastrado com essas coordenadas");
 		}
 
 		Address _address = repository.save(address);
 
 		if (Objects.isNull(_address.getLatitude()) || Objects.isNull(_address.getLongitude()))
-			solicitarCriacaoContaJMS(_address);
+			getCoordinatesGeocodingJMS(_address);
 
 		return _address;
 	}
 
 	//envia o endereço pra fila de consulta de coordenadas
-	public void solicitarCriacaoContaJMS(Address address) {
+	public void getCoordinatesGeocodingJMS(Address address) {
 		this.jmsTemplate.convertAndSend(queue, address);
 	}
 
@@ -84,10 +84,6 @@ public class AddressServiceImpl implements AddressService {
 		} else {
 			throw new NotFoundException("Endereço não encontrado com o ID: " + id);
 		}
-	}
-
-	public boolean existeEnderecoComCoordenadas(Double latitude, Double longitude) {
-		return this.repository.existeEnderecoComCoordenadas(latitude, longitude);
 	}
 
 	@Override
